@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aquatic Animals Explorer</title>
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600&family=Roboto:wght@300;400;500;900&display=swap");
+
+        :root {
+            --neon-purple: #b026ff;
+            --dark-bg: #0a0a0a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Open Sans", sans-serif;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: #fff;
+        }
+
+        main {
+            position: relative;
+            width: calc(min(90rem, 90%));
+            margin: 0 auto;
+            min-height: 100vh;
+            column-gap: 3rem;
+            padding-block: min(20vh, 3rem);
+        }
+
+        .bg,
+        .bg2 {
+            position: fixed;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            filter: hue-rotate(150deg) brightness(0.5);
+        }
+
+        .bg {
+            top: -4rem;
+            left: -12rem;
+        }
+
+        .bg2 {
+            bottom: -2rem;
+            right: -3rem;
+            width: 9.375rem;
+        }
+
+        main>div span {
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-size: 1rem;
+            color: var(--neon-purple);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        main>div h1 {
+            text-transform: capitalize;
+            letter-spacing: 0.8px;
+            font-family: "Roboto", sans-serif;
+            font-weight: 900;
+            font-size: clamp(3.4375rem, 3.25rem + 0.75vw, 4rem);
+            background-image: linear-gradient(45deg, var(--neon-purple), #ffffff);
+            background-size: 100%;
+            background-repeat: repeat;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            -moz-background-clip: text;
+            -moz-text-fill-color: transparent;
+            animation: shimmer 3s linear infinite;
+        }
+
+        main>div hr {
+            display: block;
+            background: var(--neon-purple);
+            height: 0.25rem;
+            width: 6.25rem;
+            border: none;
+            margin: 1.125rem 0 1.875rem 0;
+            animation: expand 2s ease-in-out infinite alternate;
+        }
+
+        main>div p {
+            line-height: 1.6;
+            color: #b0b0b0;
+        }
+
+        main a {
+            display: inline-block;
+            text-decoration: none;
+            text-transform: uppercase;
+            color: var(--neon-purple);
+            font-weight: 500;
+            background: rgba(176, 38, 255, 0.1);
+            border-radius: 3.125rem;
+            transition: 0.3s ease-in-out;
+        }
+
+        main>div>a {
+            border: 2px solid var(--neon-purple);
+            margin-top: 2.188rem;
+            padding: 0.625rem 1.875rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        main>div>a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(176, 38, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        main>div>a:hover::before {
+            left: 100%;
+        }
+
+        main>div>a:hover {
+            background: var(--neon-purple);
+            color: #fff;
+            box-shadow: 0 0 10px var(--neon-purple), 0 0 20px var(--neon-purple), 0 0 40px var(--neon-purple);
+        }
+
+        .swiper {
+            width: 100%;
+            padding-top: 3.125rem;
+        }
+
+        .swiper-pagination-bullet,
+        .swiper-pagination-bullet-active {
+            background: var(--neon-purple);
+        }
+
+        .swiper-pagination {
+            bottom: 1.25rem !important;
+        }
+
+        .swiper-slide {
+            width: 18.75rem;
+            height: 28.125rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: end;
+            align-items: self-start;
+            transition: transform 0.3s ease;
+        }
+
+        .swiper-slide:hover {
+            transform: scale(1.05);
+        }
+
+        .swiper-slide h2 {
+            color: #fff;
+            font-family: "Roboto", sans-serif;
+            font-weight: 400;
+            font-size: 1.4rem;
+            line-height: 1.4;
+            margin-bottom: 0.625rem;
+            padding: 0 0 0 1.563rem;
+            text-transform: uppercase;
+        }
+
+        .swiper-slide p {
+            color: #dadada;
+            font-family: "Roboto", sans-serif;
+            font-weight: 300;
+            padding: 0 1.563rem;
+            line-height: 1.6;
+            font-size: 0.75rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            line-clamp: 4;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .swiper-slide a {
+            margin: 1.25rem 1.563rem 3.438rem 1.563rem;
+            padding: 0.625rem 1.875rem;
+            font-size: 1rem;
+            background: var(--neon-purple);
+            color: #fff;
+            border: 2px solid var(--neon-purple);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 10px var(--neon-purple);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .swiper-slide a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .swiper-slide a:hover {
+            background: #fff;
+            color: var(--neon-purple);
+            box-shadow: 0 0 20px var(--neon-purple), 0 0 40px var(--neon-purple);
+            text-shadow: 0 0 5px var(--neon-purple);
+        }
+
+        .swiper-slide a:hover::before {
+            left: 100%;
+        }
+
+        .swiper-slide div {
+            display: none;
+            opacity: 0;
+            padding-bottom: 0.625rem;
+            transition: opacity 0.5s ease;
+        }
+
+        .swiper-slide-active div {
+            display: block;
+            opacity: 1;
+        }
+
+        .swiper-slide--one,
+        .swiper-slide--two,
+        .swiper-slide--three,
+        .swiper-slide--four,
+        .swiper-slide--five {
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .swiper-slide--one::before,
+        .swiper-slide--two::before,
+        .swiper-slide--three::before,
+        .swiper-slide--four::before,
+        .swiper-slide--five::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to top, rgba(10, 10, 10, 0.8), rgba(10, 10, 10, 0.3));
+        }
+
+        .swiper-slide--one {
+            background-image: url("pic 1.jpg");
+        }
+
+        .swiper-slide--two {
+            background-image: url("pic 2.jpg");
+        }
+
+        .swiper-slide--three {
+            background-image: url("pic 3.jpg");
+        }
+
+        .swiper-slide--four {
+            background-image: url("pic 4.jpg");
+        }
+
+        .swiper-slide--five {
+            background-image: url("pic 5.jpg");
+        }
+
+        .swiper-3d .swiper-slide-shadow-left,
+        .swiper-3d .swiper-slide-shadow-right {
+            background-image: none;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 5px var(--neon-purple), 0 0 10px var(--neon-purple);
+            }
+
+            to {
+                text-shadow: 0 0 10px var(--neon-purple), 0 0 20px var(--neon-purple), 0 0 30px var(--neon-purple);
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        @keyframes expand {
+            from {
+                width: 6.25rem;
+            }
+
+            to {
+                width: 8rem;
+            }
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        @media screen and (min-width: 48rem) {
+            main {
+                display: flex;
+                align-items: center;
+            }
+
+            .bg,
+            .bg2 {
+                opacity: 0.1;
+            }
+        }
+
+        @media screen and (min-width: 93.75rem) {
+            .swiper {
+                width: 85%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <div>
+            <span>discover</span>
+            <h1>Non-governmental organization (NGO)</h1>
+            <hr>
+            <p>A Non-Governmental Organization (NGO) is a non-profit, <br> voluntary group that operates independently
+                of the government to address <br> social, environmental, humanitarian, or developmental issues. <br>
+                NGOs work towards the welfare of communities by providing <br> support, advocacy, and resources in areas
+                such as <br> education, healthcare, human rights, and disaster relief.</p>
+
+        </div>
+        <div class="swiper">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide swiper-slide--one">
+                    <div>
+                        <h2>Pratham Education Foundation</h2>
+                        <p>Pratham works to improve basic literacy and numeracy in rural areas. They run large-scale
+                            programs like "Read India" to help children develop essential skills. Donations support
+                            education and community development programs.</p>
+                        <a href="https://www.pratham.org/" target="_blank">explore</a>
+                    </div>
+                </div>
+                <div class="swiper-slide swiper-slide--two">
+                    <div>
+                        <h2>Teach for India</h2>
+                        <p>Teach for India recruits young leaders to teach in underprivileged schools, aiming to
+                            eliminate educational inequity. Donations fund scholarships, teacher training, and
+                            leadership programs.</p>
+                        <a href="https://www.teachforindia.org/" target="_blank">explore</a>
+                    </div>
+                </div>
+                <div class="swiper-slide swiper-slide--three">
+                    <div>
+                        <h2>Goonj</h2>
+                        <p>
+                            Goonj addresses basic needs and education in rural areas. They run "Education for All,"
+                            distributing materials and building infrastructure. Donations support education, hygiene,
+                            and disaster relief efforts.
+                        </p>
+                        <a href="https://goonj.org/" target="_blank">explore</a>
+                    </div>
+                </div>
+                <div class="swiper-slide swiper-slide--four">
+                    <div>
+                        <h2>Manthan Foundation</h2>
+                        <p>
+                            Manthan focuses on providing educational resources, workshops, and infrastructure to rural
+                            children. Donations fund creative learning programs and teacher training.
+                        </p>
+                        <a href="https://www.manthan.org/" target="_blank">explore</a>
+                    </div>
+                </div>
+                <div class="swiper-slide swiper-slide--five">
+                    <div>
+                        <h2>Vidya Foundation</h2>
+                        <p>
+                            Vidya Foundation supports marginalized children through education, life skills, and
+                            vocational training. Donations help fund their educational initiatives and community
+                            development work.
+                        </p>
+                        <a href="https://www.godaddy.com/forsale/vidyafoundation.org?utm_source=TDFS_BINNS2&utm_medium=parkedpages&utm_campaign=x_corp_tdfs-binns2_base&traffic_type=TDFS_BINNS2&traffic_id=binns2&"
+                            target="_blank">explore</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Add Pagination -->
+            <div class="swiper-pagination"></div>
+        </div>
+        <img src="https://cdn.pixabay.com/photo/2021/11/04/19/39/jellyfish-6769173_960_720.png" alt="" class="bg">
+        <img src="https://cdn.pixabay.com/photo/2012/04/13/13/57/scallop-32506_960_720.png" alt="" class="bg2">
+    </main>
+
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script>
+        var swiper = new Swiper(".swiper", {
+            effect: "coverflow",
+            grabCursor: true,
+            centeredSlides: true,
+            coverflowEffect: {
+                rotate: 0,
+                stretch: 0,
+                depth: 100,
+                modifier: 3,
+                slideShadows: true
+            },
+            keyboard: {
+                enabled: true
+            },
+            mousewheel: {
+                thresholdDelta: 70
+            },
+            loop: true,
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true
+            },
+            breakpoints: {
+                640: {
+                    slidesPerView: 2
+                },
+                768: {
+                    slidesPerView: 1
+                },
+                1024: {
+                    slidesPerView: 2
+                },
+                1560: {
+                    slidesPerView: 3
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

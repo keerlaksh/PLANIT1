@@ -1,0 +1,694 @@
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Pomodoro Timer with AI Chat Assistant</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap"
+            rel="stylesheet">
+            
+        <style>
+           
+        :root {
+            --grey: #f5f5f5;
+            --blue: #3d88f9;
+            --black: #1a1a1a;
+        }
+            h1 {
+    font-size: 2rem;
+    font-family: 'Pacifico', cursive; /* Stylish font */
+    background: linear-gradient(135deg,     #18053da8, #f463db, #f2abab); /* Gradient colors */
+    -webkit-background-clip: text; /* Apply gradient to text */
+    -webkit-text-fill-color: transparent; /* Make text transparent to show gradient */
+    animation: gradientShift 10s linear infinite; /* Animate the gradient */
+    display: inline-block; /* Needed for some animation effects */
+}
+
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%; /* Initial position */
+    }
+    50% {
+        background-position: 100% 50%; /* Shifted position */
+    }
+    100% {
+        background-position: 0% 50%; /* Back to initial position */
+    }
+}
+
+/* Optional: Add a subtle text shadow for depth */
+h1 {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Optional: If you want the gradient to "move" within the text, rather than change colors: */
+/* Change the animation property to this: */
+/* animation: movingGradient 10s linear infinite; */
+
+/* Add this new keyframes rule: */
+@keyframes movingGradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 200% 50%; /* Move it further for a "sliding" effect */
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+        body {
+            font-family: 'Playfair Display', serif;
+            background-color: #f0f0f0;
+            background-size: cover;
+            background-position: center;
+            text-align: center;
+            padding-top: 50px;
+            transition: background-image 0.5s;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .container {
+            background: linear-gradient(135deg, rgba(74, 144, 226, 0.5), rgba(216, 51, 103, 0.5));
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 400px;
+            margin: 0 auto;
+            font-family: 'Playfair Display', serif;
+        }
+
+        h1 {
+            color: #ffffff;
+            font-size: 2rem;
+            font-family: 'Playfair Display', serif;
+        }
+
+        button {
+            background: linear-gradient(135deg, #061b4d, #9752a2);
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            font-family: 'Playfair Display', serif;
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #030e45, #cb7764);
+            box-shadow: 0 0 20px rgba(255, 105, 180, 0.7);
+        }
+
+        label {
+            font-family: 'Playfair Display', serif;
+        }
+
+        input {
+            font-family: 'Playfair Display', serif;
+        }
+
+        #timer-display {
+            font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(135deg, #55439a, #cd3fe7c4);
+            padding: 1%;
+            border-radius: 15px;
+            
+            animation: pulse 1.5s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            100% {
+                transform: scale(1.05);
+            }
+        }
+
+        #time-left {
+            font-size: 48px;
+            color: #fffcfc;
+            font-family: 'Orbitron', sans-serif;
+            text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.8);
+        }
+
+        #timer-status {
+            font-size: 18px;
+            color: #ffffff;
+            font-weight: bold;
+            font-family: 'Playfair Display', serif;
+        }
+        button:hover {
+            background: linear-gradient(135deg, #030e45, #de3ae3);
+            box-shadow: 0 0 20px rgba(255, 105, 180, 0.7);
+        }
+
+        label {
+            font-family: 'Playfair Display', serif;
+        }
+
+        form {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            gap: 100px;
+        }
+
+        .input-group {
+            flex: 1;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        input {
+    padding: 10px;
+    margin-left: -10px;
+    border: 1px solid #c91010;
+    border-radius: 5px;
+    width: 100%;
+    background: linear-gradient(135deg, #d3cfa3, #e0cfff, #e5fcf0); /* Gradient background */
+    color: #000000; /* Text color */
+   
+    
+}
+
+
+
+
+        #timer-display {
+            margin-top: 20px;
+        }
+
+        #time-left {
+            font-size: 48px;
+            color: #fffcfc;
+        }
+
+        #timer-status {
+            font-size: 18px;
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        .theme-selector,
+        .custom-background {
+            margin-top: 20px;
+        }
+
+        .theme-selector select,
+        .custom-background input {
+            padding: 12px;
+            border-radius: 5px;
+            border: 1px solid #762323;
+            cursor: pointer;
+        }
+
+        body.theme-1 {
+            background-image: url('https://images.unsplash.com/photo-1484950763426-56b5bf172dbb?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+        }
+
+        body.theme-2 {
+            background-image: url('purple-sky.jpg');
+        }
+
+        body.theme-3 {
+            background-image: url('retro-desktop-wallpaper-6.jpg');
+        }
+
+        .chat-window {
+            display: none;
+            box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+            background-color: rgb(19, 19, 19);
+            border-radius: 20px;
+            position: absolute;
+            z-index: 999;
+            bottom: 60px;
+            right: 20px;
+            height: 580px;
+            width: 400px;
+            flex-direction: column;
+            justify-content: space-between;
+            ;
+        }
+
+        .chat-button {
+            position: absolute;
+            bottom: 60px;
+            right: 20px;
+            z-index: 998;
+            background-color: var(--black);
+            color: white;
+            height: 80px;
+            width: 80px;
+            border-radius: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .chat-button:hover {
+            transform: scale(1.1);
+        }
+
+        .chat-button img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .chatbot-image {
+            display: none;
+        }
+
+        .chat-window .close {
+            border: none;
+            padding: 8px 0;
+            background-color: var(--black);
+            color: rgb(255, 255, 255);
+            border-radius: 20px 20px 0 0;
+            cursor: pointer;
+            transition: none; /* Removed transition for close button */
+        }
+
+        
+       .chat-window input {
+       color: black;
+        }
+
+
+
+        .chat-window .input-area button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            padding: 0;
+            
+        }
+
+        .chat-window .input-area button img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            
+        }
+
+        .chat-window .chat {
+            flex: 1;
+            padding: 0 8px;
+            overflow-y: scroll;
+        }
+
+.chat-window .chat div.model p {
+    background-color: #f4ecec; /* Light grey for contrast */
+    color: rgb(0, 0, 0); /* Ensures text is visible */
+    border-radius: 20px;
+    padding: 10px;
+    width: fit-content;
+    max-width: 80%;
+
+}
+
+
+        .chat-window .chat div.user {
+            display: flex;
+            justify-content: flex-end;
+            
+        }
+
+        .chat-window .chat div.user p {
+            background: linear-gradient(to right, #8A2BE2, #490579d7);
+            color: rgb(243, 241, 241);
+            border-radius: 20px;
+            padding: 16px;
+            margin: 8px 0;
+        }
+        .chat-window .input-area {
+            background: linear-gradient(to bottom, #48546d, #1e2127); /* Example gradient */
+            padding: 10px; /* Add some padding */
+            border-radius: 0 0 20px 20px; /* Keep the bottom corners rounded */
+            display: flex; /* Ensure flexbox for alignment */
+            align-items: center; /* Vertically center content */
+            color: black;
+
+
+        }
+
+        .chat-window .input-area input {
+            flex-grow: 1; /* Allow input to expand */
+            background-color: #000000; /* Darker background for input */
+            color: #000000; /* Light text color */
+            border: none;
+            padding: 8px;
+            margin-left:0; /* Space between input and button */
+            border-radius: 5px;
+        }
+
+
+        .loader {
+            width: 40px;
+            opacity: 0.4;
+            aspect-ratio: 4;
+            background: radial-gradient(circle closest-side, #faf3f3 90%, #ebe4e400) 0/calc(100%/3) 100% space;
+            clip-path: inset(0 100% 0 0);
+            animation: l1 1.5s steps(4) infinite;
+        }
+
+        @keyframes l1 {
+            to {
+                clip-path: inset(0 -34% 0 0);
+            }
+        }
+
+        .spotify-playlist {
+            position: absolute;
+            left: 0;
+        }
+        </style>
+    </head>
+
+    <body class="theme-1">
+        <div class="spotify-playlist">
+            <iframe src="https://open.spotify.com/embed/playlist/37i9dQZF1DX8Uebhn9wzrS" width="250" height="400"
+                frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+        </div>
+
+
+        <div class="container">
+            <h1>Pomodoro Timer</h1>
+            <form id="timer-form">
+                <div class="input-group">
+                    <label for="study-minutes">Study Time</label>
+                    <input type="number" id="study-minutes" placeholder="Study time in minutes" required>
+                </div>
+                <div class="input-group">
+                    <label for="break-minutes">Break Time</label>
+                    <input type="number" id="break-minutes" placeholder="Break time in minutes" required>
+                </div>
+            </form>
+            <button type="submit" form="timer-form">Start Timer</button>
+
+            <div id="timer-display">
+                <h2 id="time-left">00:00</h2>
+                <p id="timer-status">Waiting to start...</p>
+            
+            </div>
+
+            <div class="theme-selector">
+                <label for="theme-select">Select Theme</label>
+                <select id="theme-select">
+                    <option value="theme-1" selected>Theme 1</option>
+                    <option value="theme-2">Theme 2</option>
+                    <option value="theme-3">Theme 3</option>
+                </select>
+            </div>
+
+            <div class="custom-background">
+                <label for="background-upload">Upload Custom Background</label>
+                <input type="file" id="background-upload" accept="image/*">
+            </div>
+        </div>
+
+        <audio id="notification-sound" src="level-up-47165.mp3" preload="auto"></audio> <!-- Add your sound file here -->
+
+        <div class="chat-button">
+            <img src="i want a chatbot icon and more realistic (1).png" alt="start chat">
+        </div>
+
+        <section class="chat-window">
+            <button class="close">x close</button>
+            <div class="chat">
+                <div class="model">
+                    <p>Hey there, superstar! 🌟 What's on your mind today? Ready to dive into something exciting, or is
+                        there a tricky concept
+                        I can help you totally conquer? Let’s make this fun and productive—what’s the mission?</p>
+                </div>
+            </div>
+            <div class="input-area">
+                <input placeholder="Ask me anything..." type="text">
+                <button>
+                    <img src="946288.png" alt="send" style="width: 20px; height: 20px;">
+                </button>
+            </div>
+        </section>
+
+        <script type="importmap">
+            {
+            "imports": {
+                "@google/generative-ai": "https://esm.run/@google/generative-ai"
+            }
+            }
+        </script>
+
+        <script type="module">
+            import { GoogleGenerativeAI } from "@google/generative-ai";
+
+            const businessInfo = `
+        Role:
+    You are a friendly, educational chatbot integrated into a Pomodoro timer. Your primary role is to help students understand academic concepts in simple, engaging ways. You explain topics from scratch, break them into easy-to-follow points, use mnemonics, and make studying enjoyable through positive interactions and fun activities.
+
+    Behavior:
+    Explain Concepts Clearly:
+
+    Use straightforward, conversational language.
+    Assume the student has no prior knowledge; build up understanding step by step.
+    Provide structured explanations using numbered or bulleted lists.
+    Make Learning Fun:
+
+    Include lighthearted analogies or humor to maintain interest.
+    Introduce small, engaging challenges, like asking questions or mini quizzes.
+    Celebrate successes with cheerful phrases like:
+    "Awesome job! 🌟"
+    "You’re crushing it! 🎉"
+    "That’s the spirit! 🚀"
+    Create Mnemonics:
+
+    Craft creative, memorable mnemonics (e.g., acronyms, rhymes, or quirky sentences).
+    Present mnemonics in a playful, easy-to-understand manner.
+    Interactive and Engaging:
+
+    Check for understanding frequently with prompts like:
+    "How’s this sounding so far?"
+    "Need me to explain anything else?"
+    Tailor the level of detail based on the student's feedback.
+    Use Real-Life Examples and Analogies:
+
+    Relate abstract concepts to everyday scenarios.
+    Employ creative storytelling to simplify complex ideas.
+    Stay Positive and Encouraging:
+
+    Provide constant motivation with affirmations such as:
+    "You’re doing an amazing job!"
+    "It’s okay to take it slow—you’ve got this!"
+    "Every step forward is progress!"
+    Incorporate Break Activities:
+
+    Suggest refreshing activities during Pomodoro breaks, such as:
+    “Take a deep breath and relax for a moment!”
+    “Stretch it out—it’ll help you focus better!”
+    Offer cheerful reminders to come back to studying recharged.
+    Adapt to Student Needs:
+
+    Simplify or rephrase explanations if the topic feels too challenging.
+    Always be patient and reassuring, offering alternate approaches if necessary.
+    Encourage Active Learning Techniques:
+
+    Suggest summarizing concepts or teaching them aloud to reinforce understanding.
+    Encourage revisiting tricky topics after a short break.
+    System Prompts:
+    When a student asks a question:
+
+    Restate the question in a friendly way: “Great question! Let’s dive in.”
+    Start with the basics and proceed step-by-step.
+    Incorporate mnemonics, examples, or analogies to clarify.
+    Conclude with: “Does that clear things up? Let me know if you want more details!”
+    If the student feels bored or demotivated:
+
+    Share an uplifting message:
+    “Don’t give up—you’re closer than you think!”
+    “Learning can be tough, but you’re tougher!”
+    Introduce a fun challenge or mnemonic to spark interest.
+    At the end of each explanation:
+
+    Summarize the key points concisely.
+    Confirm understanding with: “Does this all make sense?”
+    Motivate them to keep going with cheerful encouragement.
+    Does this capture the tone and functionality you envision?
+
+    give it in an organized way with headings and subheadings for better readability. I'll make sure to keep it concise and clear. Here's
+
+            `;
+
+            const API_KEY = "AIzaSyA6uSRosIjKTkypW25JtVWmsqNC_FqvSFY";
+            const genAI = new GoogleGenerativeAI(API_KEY);
+            const model = genAI.getGenerativeModel({
+                model: "gemini-1.5-pro",
+                systemInstruction: businessInfo
+            });
+
+            let messages = {
+                history: [],
+            }
+
+            async function sendMessage() {
+                const userMessage = document.querySelector(".chat-window input").value;
+
+                if (userMessage.length) {
+                    try {
+                        document.querySelector(".chat-window input").value = "";
+                        document.querySelector(".chat-window .chat").insertAdjacentHTML("beforeend", `
+                            <div class="user">
+                                <p>${userMessage}</p>
+                            </div>
+                        `);
+
+                        document.querySelector(".chat-window .chat").insertAdjacentHTML("beforeend", `
+                            <div class="loader"></div>
+                        `);
+
+                        const chat = model.startChat(messages);
+                        let result = await chat.sendMessageStream(userMessage);
+
+                        document.querySelector(".chat-window .chat").insertAdjacentHTML("beforeend", `
+                            <div class="model">
+                                <p></p>
+                            </div>
+                        `);
+
+                      let modelMessages = document.querySelectorAll(".chat-window .chat div.model p");
+                        let lastMessage = modelMessages[modelMessages.length - 1]; // Get the last bot message <p>
+
+                        for await (const chunk of result.stream) {
+                            const chunkText = chunk.text();
+                            lastMessage.innerHTML += chunkText; // Append text instead of inserting a new element
+                        }
+
+
+                        messages.history.push({
+                            role: "user",
+                            parts: [{ text: userMessage }],
+                        });
+
+                        messages.history.push({
+                            role: "model",
+                            parts: [{ text: modelMessages[modelMessages.length - 1].querySelector("p").innerHTML }],
+                        });
+
+                    } catch (error) {
+                        document.querySelector(".chat-window .chat").insertAdjacentHTML("beforeend", `
+                            <div class="error">
+                                <p>The message could not be sent. Please try again.</p>
+                            </div>
+                        `);
+                    }
+
+                    document.querySelector(".chat-window .chat .loader").remove();
+                }
+            }
+
+            document.querySelector(".chat-window .input-area button")
+                .addEventListener("click", () => sendMessage());
+
+            document.querySelector(".chat-button")
+                .addEventListener("click", () => {
+                    document.querySelector(".chat-window").style.display = "flex";
+                });
+
+            document.querySelector(".chat-window button.close")
+                .addEventListener("click", () => {
+                    document.querySelector(".chat-window").style.display = "none";
+                });
+
+            const form = document.getElementById('timer-form');
+            const timeLeftDisplay = document.getElementById('time-left');
+            const timerStatus = document.getElementById('timer-status');
+            
+            const themeSelect = document.getElementById('theme-select');
+            const backgroundUpload = document.getElementById('background-upload');
+
+            let isPaused = false;
+            let interval;
+            let currentPhase;
+            let remainingSeconds;
+
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
+                const studyMinutes = parseInt(document.getElementById('study-minutes').value);
+                const breakMinutes = parseInt(document.getElementById('break-minutes').value);
+                startTimer(studyMinutes, breakMinutes);
+            });
+
+            function startTimer(studyMinutes, breakMinutes) {
+                currentPhase = 'study';
+                remainingSeconds = studyMinutes * 60;
+                timerStatus.innerText = "Studying...";
+                updateCountdown(breakMinutes);
+            }
+
+            function startBreakTimer(breakMinutes) {
+                currentPhase = 'break';
+                remainingSeconds = breakMinutes * 60;
+                timerStatus.innerText = "Break Time!";
+                updateCountdown(breakMinutes);
+            }
+
+            function updateCountdown(breakMinutes) {
+                clearInterval(interval);
+                interval = setInterval(() => {
+                    if (!isPaused) {
+                        const minutes = Math.floor(remainingSeconds / 60);
+                        const seconds = remainingSeconds % 60;
+                        timeLeftDisplay.innerText = String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0');
+                        remainingSeconds--;
+
+                        if (remainingSeconds < 0) {
+                            clearInterval(interval);
+                            const notificationSound = document.getElementById('notification-sound');
+                            notificationSound.play(); // Play notification sound
+                            if (currentPhase === 'study') {
+                                startBreakTimer(breakMinutes);
+                            } else {
+                                timerStatus.innerText = "Session Complete!";
+                            }
+                        }
+                    }
+                }, 1000);
+            }
+
+        
+            themeSelect.addEventListener('change', function () {
+                document.body.classList.remove('theme-1', 'theme-2', 'theme-3');
+                document.body.classList.add(themeSelect.value);
+            });
+
+          backgroundUpload.addEventListener('change', function (event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        document.body.style.backgroundImage = `url('${e.target.result}')`; // Use template literals
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+
+        </script>
+    </body>
+
+    </html>

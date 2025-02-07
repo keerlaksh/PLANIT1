@@ -1,0 +1,774 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlanIt - AI Study Planner</title>
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Header Styles */
+        header {
+            background-image:
+                linear-gradient(90deg, #A100F280, #8A4FFF80, #D100D180, #9B4FDB80),
+                linear-gradient(-90deg, #483D8B80, #A100F280, #D100D180, #8A4FFF80),
+                linear-gradient(90deg, #9B4FDB80, #483D8B80, #A100F280, #D100D180);
+            background-size: 200% 200%, 200% 200%, 200% 200%;
+            padding: 20px 30px;
+            position: fixed;
+            top: 0;
+            width: calc(100% - 60px);
+            z-index: 10;
+            animation: liquidFlow 15s infinite ease-in-out;
+            transition: all 0.5s ease;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 20px rgba(161, 0, 242, 0.2);
+        }
+
+        header.scrolled {
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 15px 30px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #fff;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.1);
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 15px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 14px;
+            padding: 8px 12px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-links a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        #hero {
+            height: 100vh;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content {
+            width: 50%;
+            text-align: left;
+        }
+
+        #hero h1 {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            animation: glow 2s infinite alternate, floatText 5s ease-in-out infinite;
+        }
+
+        #hero p {
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            max-width: 600px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s forwards 0.5s, floatText 6s ease-in-out infinite;
+        }
+
+        /* Logo Container */
+        .logo-container {
+            width: 45%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .animated-logo {
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            animation: rotateLogo 20s linear infinite;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #1a1a1a;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Animations */
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 10px #A100F2, 0 0 20px #D100D1, 0 0 30px #A100F2;
+            }
+
+            to {
+                text-shadow: 0 0 20px #D100D1, 0 0 30px #A100F2, 0 0 40px #D100D1;
+            }
+        }
+
+        @keyframes liquidFlow {
+            0% {
+                background-position: 0% 50%, 100% 50%, 50% 50%;
+            }
+
+            33% {
+                background-position: 100% 50%, 0% 50%, 150% 50%;
+            }
+
+            67% {
+                background-position: 0% 50%, 100% 50%, -50% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%, 100% 50%, 50% 50%;
+            }
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes floatText {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        @keyframes rotateLogo {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Particles Container */
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        /* Blog Slider Styles */
+        .blog-slider {
+            width: 95%;
+            position: relative;
+            max-width: 800px;
+            margin: 50px auto;
+            background: #fff;
+            box-shadow: 0px 14px 80px rgba(155, 79, 219, 0.2);
+            padding: 25px;
+            border-radius: 25px;
+            height: 400px;
+            transition: all .3s;
+        }
+
+        .blog-slider__wrp {
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .blog-slider__item {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .blog-slider__item.swiper-slide-active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .blog-slider__img {
+            width: 300px;
+            flex-shrink: 0;
+            height: 300px;
+            background-image: linear-gradient(147deg, #D100D180 0%, #9B4FDB80 74%);
+            box-shadow: 4px 13px 30px 1px rgba(155, 79, 219, 0.2);
+            border-radius: 20px;
+            transform: translateX(-80px);
+            overflow: hidden;
+        }
+
+        .blog-slider__img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            opacity: 1;
+            border-radius: 20px;
+            transition: all .3s;
+        }
+
+        .blog-slider__content {
+            padding-right: 25px;
+            padding-left: 25px;
+            width: calc(100% - 300px);
+        }
+
+        .blog-slider__code {
+            color: #7b7992;
+            margin-bottom: 15px;
+            display: block;
+            font-weight: 500;
+        }
+
+        .blog-slider__title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #0d0925;
+            margin-bottom: 20px;
+        }
+
+        .blog-slider__text {
+            color: #4e4a67;
+            margin-bottom: 30px;
+            line-height: 1.5em;
+        }
+
+        .blog-slider__button {
+            display: inline-flex;
+            background-image: linear-gradient(147deg, #D100D180 0%, #9B4FDB80 74%);
+            padding: 15px 35px;
+            border-radius: 50px;
+            color: #fff;
+            box-shadow: 0px 14px 80px rgba(155, 79, 219, 0.4);
+            text-decoration: none;
+            font-weight: 500;
+            justify-content: center;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        .blog-slider .swiper-pagination-bullet {
+            width: 11px;
+            height: 11px;
+            display: block;
+            border-radius: 10px;
+            background: #062744;
+            opacity: 0.2;
+            transition: all .3s;
+            margin: 0 5px;
+        }
+
+        .blog-slider .swiper-pagination-bullet-active {
+            opacity: 1;
+            background: #9B4FDB80;
+            height: 30px;
+            box-shadow: 0px 0px 20px rgba(155, 79, 219, 0.3);
+        }
+
+        .blog-slider .swiper-pagination {
+            position: absolute;
+            z-index: 21;
+            right: 20px;
+            width: 11px !important;
+            text-align: center;
+            left: auto !important;
+            top: 50%;
+            bottom: auto !important;
+            transform: translateY(-50%);
+        }
+
+        .blog-slider .swiper-container-horizontal>.swiper-pagination-bullets,
+        .blog-slider .swiper-pagination-custom,
+        .blog-slider .swiper-pagination-fraction {
+            bottom: 10px;
+            left: 0;
+            width: 100%;
+        }
+
+        /* Responsive Design */
+        @media screen and (max-width: 768px) {
+            #hero {
+                flex-direction: column;
+                text-align: center;
+                padding: 20px;
+            }
+
+            .hero-content,
+            .logo-container {
+                width: 100%;
+            }
+
+            .hero-content {
+                margin-bottom: 2rem;
+            }
+
+            #hero h1 {
+                font-size: 3rem;
+            }
+
+            #hero p {
+                font-size: 1.4rem;
+            }
+
+            .animated-logo {
+                max-width: 300px;
+            }
+
+            .blog-slider {
+                min-height: 500px;
+                height: auto;
+                margin: 180px auto;
+            }
+
+            .blog-slider__item {
+                flex-direction: column;
+            }
+
+            .blog-slider__img {
+                transform: translateY(-50%);
+                width: 90%;
+                margin: 0 auto;
+                margin-top: 50px;
+            }
+
+            .blog-slider__content {
+                margin-top: -80px;
+                text-align: center;
+                padding: 0 30px;
+                width: 100%;
+            }
+
+            .blog-slider .swiper-pagination {
+                transform: translateX(-50%);
+                left: 50% !important;
+                top: 205px;
+                width: 100% !important;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .blog-slider .swiper-pagination-bullet {
+                margin: 0 5px;
+            }
+
+            .blog-slider .swiper-pagination-bullet-active {
+                height: 11px;
+                width: 30px;
+            }
+
+            #hero h1 {
+                font-size: 5rem;
+                margin-bottom: 20px;
+                animation: glow 2s infinite alternate, floatText 5s ease-in-out infinite;
+            }
+
+            #hero p {
+                font-size: 1.8rem;
+                margin-bottom: 30px;
+                max-width: 600px;
+                opacity: 0;
+                transform: translateY(20px);
+                animation: fadeInUp 1s forwards 0.5s, floatText 6s ease-in-out infinite;
+            }
+
+            /* Add animations for the Lottie logo */
+            .animated-logo {
+                animation: fadeInUp 1.5s forwards 0.8s, floatLogo 4s ease-in-out infinite;
+            }
+
+            /* Animations */
+            @keyframes fadeInUp {
+                0% {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+
+                100% {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            @keyframes floatLogo {
+
+                0%,
+                100% {
+                    transform: translateY(-10px);
+                }
+
+                50% {
+                    transform: translateY(10px);
+                }
+            }
+
+            @keyframes glow {
+                0% {
+                    text-shadow: 0 0 5px #fff, 0 0 10px #ff99ff, 0 0 20px #ff33cc;
+                }
+
+                100% {
+                    text-shadow: 0 0 10px #ff33cc, 0 0 20px #ff66cc, 0 0 30px #ff33cc;
+                }
+            }
+
+            @keyframes floatText {
+
+                0%,
+                100% {
+                    transform: translateY(0);
+                }
+
+                50% {
+                    transform: translateY(-5px);
+                }
+            }
+
+            #hero {
+                text-align: center;
+                padding: 50px 20px;
+            }
+
+            #hero h1 {
+                font-size: 5rem;
+                margin-bottom: 20px;
+                animation: glow 2s infinite alternate, floatText 5s ease-in-out infinite;
+            }
+
+            #hero p {
+                font-size: 1.8rem;
+                margin-bottom: 30px;
+                max-width: 600px;
+                margin-left: auto;
+                margin-right: auto;
+                opacity: 0;
+                transform: translateY(20px);
+                animation: fadeInUp 1s forwards 0.5s, floatText 6s ease-in-out infinite;
+            }
+
+            .floating-logo {
+                animation: fadeInUp 1.5s forwards 0.8s, floatEffect 4s ease-in-out infinite;
+                display: inline-block;
+            }
+
+            /* Animations */
+            @keyframes fadeInUp {
+                0% {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+
+                100% {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            @keyframes floatEffect {
+
+                0%,
+                100% {
+                    transform: translateY(0);
+                }
+
+                50% {
+                    transform: translateY(-10px);
+                }
+            }
+
+            @keyframes glow {
+                0% {
+                    text-shadow: 0 0 5px #fff, 0 0 10px #ff99ff, 0 0 20px #ff33cc;
+                }
+
+                100% {
+                    text-shadow: 0 0 10px #ff33cc, 0 0 20px #ff66cc, 0 0 30px #ff33cc;
+                }
+            }
+
+            @keyframes floatText {
+
+                0%,
+                100% {
+                    transform: translateY(0);
+                }
+
+                50% {
+                    transform: translateY(-5px);
+                }
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Particles.js Container -->
+    <div id="particles-js"></div>
+
+    <header>
+        <nav>
+            <div class="logo">PlanIt</div>
+            <ul class="nav-links">
+                <li><a href="index.html">PeakPlanner</a></li>
+                <li><a href="bot.html">Zeni</a></li>
+                <li><a href="meditation.html">CalmSphere</a></li>
+                <li><a href=" http://localhost:3000">Mapify</a></li>
+                <li><a href="pomodro.html">FocusFlow</a></li>
+                <li><a href=" http://localhost:8501">FileTalk</a></li>
+                <li><a href="http://127.0.0.1:5000">GeekHub</a></li>
+                <li><a href="cha.html">CharityBridge</a></li>
+                <li><a href="google.html">ReviewRealm</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="hero">
+            <div class="hero-content">
+                <h1>Welcome to PlanIt</h1>
+                <p>Your ultimate AI-powered Educational Environment</p>
+            </div>
+            <div class="lottie-container">
+                <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs"
+                    type="module"></script>
+                <dotlottie-player src="https://lottie.host/770f8400-bdb5-4a34-93b1-fb00d8693c90/IzpYuv4VOg.lottie"
+                    background="transparent" speed="1" style="width: 300px; height: 300px" loop autoplay>
+
+                </dotlottie-player>
+            </div>
+        </section>
+
+        <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs"
+            type="module"></script>
+
+
+        <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs"
+            type="module"></script>
+
+
+        <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs"
+            type="module"></script>
+
+        <div class="blog-slider">
+            <div class="blog-slider__wrp swiper-wrapper">
+                <div class="blog-slider__item swiper-slide">
+                    <div class="blog-slider__img">
+                        <img src="download.jpg" alt="">
+                    </div>
+                    <div class="blog-slider__content">
+                        <span class="blog-slider__code">ABOUT</span>
+                        <div class="blog-slider__title">What PlanIt Is About</div>
+                        <div class="blog-slider__text">🚀 PlanIt is your ultimate AI-powered study wingman! Ace your
+                            studies, crush your goals, and vibe with a community that’s as motivated as you are! 🌟✨
+                        </div>
+                    </div>
+                </div>
+                <div class="blog-slider__item swiper-slide">
+                    <div class="blog-slider__img">
+                        <img src="study_plan_logo.png" alt="">
+                    </div>
+                    <div class="blog-slider__content">
+                        <span class="blog-slider__code">ABOUT</span>
+                        <div class="blog-slider__title">Study Plan Generator</div>
+                        <div class="blog-slider__text">📅 Your success, planned to perfection! Let our AI magic create
+                            study schedules tailored just for you. Goals? Crushed. ✅💪</div>
+                    </div>
+                </div>
+                <div class="blog-slider__item swiper-slide">
+                    <div class="blog-slider__img">
+                        <img src="zeni_logo.png" alt="">
+                    </div>
+                    <div class="blog-slider__content">
+                        <span class="blog-slider__code">ABOUT</span>
+                        <div class="blog-slider__title">Mental Health Chatbot - Zeni</div>
+                        <div class="blog-slider__text">💬 Meet Zeni, your 24/7 cheerleader! Boost your mood, crush
+                            stress, and stay on top of your game. You’ve got this! 💖🔥</div>
+                    </div>
+                </div>
+                <div class="blog-slider__item swiper-slide">
+                    <div class="blog-slider__img">
+                        <img src="meditation_logo.png" alt="">
+                    </div>
+                    <div class="blog-slider__content">
+                        <span class="blog-slider__code">ABOUT</span>
+                        <div class="blog-slider__title">Meditation Feature</div>
+                        <div class="blog-slider__text">🧘‍♀ Refresh. Recharge. Rule. Dive into soothing meditations to
+                            unlock next-level focus and peace. Zen mode: ON! 🌊💎</div>
+                    </div>
+                </div>
+                <div class="blog-slider__item swiper-slide">
+                    <div class="blog-slider__img">
+                        <img src="flowchart_logo.png" alt="">
+                    </div>
+                    <div class="blog-slider__content">
+                        <span class="blog-slider__code">ABOUT</span>
+                        <div class="blog-slider__title">Flowchart Generator</div>
+                        <div class="blog-slider__text">📊 Turn chaos into clarity! Transform ideas into stunning
+                            flowcharts that make learning a breeze. 🧠🚀</div>
+                    </div>
+                </div>
+                <div class="blog-slider__item swiper-slide">
+                    <div class="blog-slider__img">
+                        <img src="pomodoro_logo.png" alt="">
+                    </div>
+                    <div class="blog-slider__content">
+                        <span class="blog-slider__code">ABOUT</span>
+                        <div class="blog-slider__title"> Pomodoro + Doubt Chatbot</div>
+                        <div class="blog-slider__text">⏱ Power focus meets smart solutions! Master time with the
+                            Pomodoro technique while our doubt-clearing bot has your back. Win-win! 🔥💡</div>
+                    </div>
+                </div>
+                <div class="blog-slider__item swiper-slide">
+                    <div class="blog-slider__img">
+                        <img src="chat_with_pdf_logo.png" alt="">
+                    </div>
+                    <div class="blog-slider__content">
+                        <span class="blog-slider__code">ABOUT</span>
+                        <div class="blog-slider__title">Chat with PDF</div>
+                        <div class="blog-slider__text">📖 Your PDFs just got smarter! Ask, learn, and conquer your
+                            materials effortlessly. No limits, just learning! 🪄📚</div>
+                    </div>
+                </div>
+                <div class="blog-slider__item swiper-slide">
+                    <div class="blog-slider__img">
+                        <img src="community_logo.png" alt="">
+                    </div>
+                    <div class="blog-slider__content">
+                        <span class="blog-slider__code">ABOUT</span>
+                        <div class="blog-slider__title">Community</div>
+                        <div class="blog-slider__text">🌐 Level up together! Share, inspire, and grow with a thriving
+                            community of learners. Your squad awaits! 🌟💬✨</div>
+                    </div>
+                </div>
+            </div>
+            <div class="blog-slider__pagination"></div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 PlanIt. All rights reserved.</p>
+    </footer>
+
+    <!-- Particles.js -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <!-- Swiper JS -->
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+    <script>
+        // Particles.js Configuration
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: "#ffffff" },
+                shape: { type: "circle", stroke: { width: 0, color: "#000000" }, polygon: { nb_sides: 5 }, },
+                opacity: { value: 0.5, random: false, anim: { enable: false, speed: 1, opacity_min: 0.1, sync: false } },
+                size: { value: 3, random: true, anim: { enable: false, speed: 40, size_min: 0.1, sync: false } },
+                line_linked: { enable: true, distance: 150, color: "#ffffff", opacity: 0.4, width: 1 },
+                move: { enable: true, speed: 6, direction: "none", random: false, straight: false, out_mode: "out", bounce: false, attract: { enable: false, rotateX: 600, rotateY: 1200 } },
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: { onhover: { enable: true, mode: "repulse" }, onclick: { enable: true, mode: "push" }, resize: true },
+                modes: { grab: { distance: 400, line_linked: { opacity: 1 } }, bubble: { distance: 400, size: 40, duration: 2, opacity: 8, speed: 3 }, repulse: { distance: 200, duration: 0.4 }, push: { particles_nb: 4 }, remove: { particles_nb: 2 } },
+            },
+            retina_detect: true
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            header.classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // Animate elements on scroll
+        const animateOnScroll = () => {
+            const elements = document.querySelectorAll('.animate-on-scroll');
+            elements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                if (elementTop < windowHeight - 100) {
+                    element.classList.add('animated');
+                }
+            });
+        };
+
+        window.addEventListener('scroll', animateOnScroll);
+        animateOnScroll(); // Initial check on page load
+
+        // Initialize Swiper
+        var swiper = new Swiper('.blog-slider', {
+            spaceBetween: 30,
+            effect: 'fade',
+            loop: true,
+            mousewheel: {
+                invert: false,
+            },
+            pagination: {
+                el: '.blog-slider__pagination',
+                clickable: true,
+            },
+            // Navigation arrows
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+        });
+    </script>
+</body>
+
+</html>

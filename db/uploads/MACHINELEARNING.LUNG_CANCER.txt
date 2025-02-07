@@ -1,0 +1,8 @@
+DATA PREPROCESSING
+.head()
+.tail()
+.info()
+.describe()
+.shape
+.size
+.isnull().sum()--> check if we have missing values

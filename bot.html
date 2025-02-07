@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zeni - PlanIt Chatbot</title>
+    <style>
+        /* Updated Color Palette */
+        :root {
+            --dark-teal: #11302a;
+            --teal-accent: #036264;
+            --deep-mauve: #8f5774;
+            --soft-pink: #e0829d;
+            --pale-pink: #b045d6;
+            --dark-teal: #11302a;
+            --teal-accent: #036264;
+            --deep-mauve: #8f5774;
+            --soft-pink: #e0829d;
+            --pale-pink: #b045d6;
+        }
+
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--dark-teal);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .background {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            background: #191717;
+            z-index: -1;
+        }
+
+        .background span {
+            width: 20vmin;
+            height: 20vmin;
+            border-radius: 20vmin;
+            backface-visibility: hidden;
+            position: absolute;
+            animation-name: move;
+            animation-duration: 6s;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+        }
+
+        .background span:nth-child(1) {
+            color: #583C87;
+            top: 12%;
+            left: 17%;
+            animation-duration: 15.3s;
+            animation-delay: -10.7s;
+            transform-origin: -5vw 10vh;
+            box-shadow: 40vmin 0 10vmin #583C87;
+        }
+
+        .background span:nth-child(2) {
+            color: #E45A84;
+            top: 84%;
+            left: 54%;
+            animation-duration: 13.6s;
+            animation-delay: -8.2s;
+            transform-origin: -14vw 12vh;
+            box-shadow: 40vmin 0 10vmin #E45A84;
+        }
+
+        .background span:nth-child(3) {
+            color: #FFACAC;
+            top: 39%;
+            left: 81%;
+            animation-duration: 12.2s;
+            animation-delay: -14.5s;
+            transform-origin: 24vw -22vh;
+            box-shadow: -40vmin 0 10vmin #FFACAC;
+        }
+
+        /* Add more span styles for the remaining background spans */
+
+        @keyframes move {
+            100% {
+                transform: translate3d(0, 0, 1px) rotate(360deg);
+            }
+        }
+
+        .chat-container {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 1000px;
+            height: 85vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            backdrop-filter: blur(10px);
+            z-index: 10;
+        }
+
+        .chat-box {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: calc(100% - 80px);
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: scroll;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 80px;
+            scroll-behavior: smooth;
+        }
+
+        .message {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 15px;
+            word-wrap: break-word;
+            line-height: 1.4;
+            display: inline-block;
+        }
+
+        .user-message {
+    background: linear-gradient(135deg, #9e57b2, #ab7897); /* Pink to White gradient */
+    color: #333; /* Darker text for contrast */
+    align-self: flex-end;
+    border-bottom-right-radius: 5px;
+}
+
+
+        .bot-message {
+    background: linear-gradient(135deg, #6d4792, #b86b91); /* Purple to Pink gradient */
+    color: white;
+    align-self: flex-start;
+    border-bottom-left-radius: 5px;
+}
+
+
+        .input-container {
+            display: flex;
+            padding: 15px;
+            border-top: 2px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            justify-content: space-between;
+            align-items: center;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            max-width: 970px;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        #user-input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid var(--teal-accent);
+            border-radius: 20px;
+            margin-right: 10px;
+            font-size: 16px;
+            min-height: 40px;
+            resize: none;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--pale-pink);
+        }
+
+        .send-button {
+            background: linear-gradient(135deg, var(--deep-mauve), var(--soft-pink));
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+        }
+
+        .send-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(143, 87, 116, 0.5);
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: var(--deep-mauve);
+            border-radius: 4px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb:hover {
+            background: var(--soft-pink);
+        }
+
+        .scroll-button {
+            position: fixed;
+            bottom: calc(15px + 40px);
+            right: calc((100% - 1000px) / 2 + 20px);
+            background: linear-gradient(135deg, var(--teal-accent), var(--deep-mauve));
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .scroll-button:hover {
+            transform: translateY(-2px) scale(1.1);
+            background: linear-gradient(135deg, var(--deep-mauve), var(--soft-pink));
+        }
+
+        .scroll-button.visible {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .scroll-button::before {
+            content: "";
+            width: 12px;
+            height: 12px;
+            border-left: 3px solid white;
+            border-bottom: 3px solid white;
+            transform: rotate(-45deg) translate(2px, -2px);
+        }
+
+        .bot-logo {
+            position: fixed;
+            left: 0.5px;
+            top: 20px;
+            width: 60px;
+            height: 50px;
+            z-index: 1000;
+        }
+
+        .bot-logo img {
+            width: 500%;
+            height: 500%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="background">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <div class="bot-logo">
+        <img src="https://i.pinimg.com/originals/79/04/42/7904424933cc535b666f2de669973530.gif" alt="Bot Logo">
+    </div>
+    <div class="chat-container">
+        <div class="chat-box">
+            <div class="chat-messages" id="chat-messages"></div>
+            <button id="scroll-button" class="scroll-button" aria-label="Scroll to bottom"></button>
+            <div class="input-container">
+                <input type="text" id="user-input" placeholder="Type your message...">
+                <button id="send-button" class="send-button">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var chatMessages = document.getElementById('chat-messages');
+        var userInput = document.getElementById('user-input');
+        var sendButton = document.getElementById('send-button');
+        var scrollButton = document.getElementById('scroll-button');
+
+        var GROQ_API_ENDPOINT = 'https://api.groq.com/openai/v1/chat/completions';
+
+        function toggleScrollButton() {
+            const { scrollTop, scrollHeight, clientHeight } = chatMessages;
+            const scrolledUp = scrollHeight - scrollTop - clientHeight > 20;
+            scrollButton.classList.toggle('visible', scrolledUp);
+        }
+
+        function scrollToBottom() {
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function addMessage(content, isUser) {
+            var messageElement = document.createElement('div');
+            messageElement.classList.add('message');
+            messageElement.classList.add(isUser ? 'user-message' : 'bot-message');
+            messageElement.textContent = content;
+            chatMessages.appendChild(messageElement);
+            scrollToBottom();
+            toggleScrollButton();
+        }
+
+        function getGroqChatCompletion(message) {
+            return fetch(GROQ_API_ENDPOINT, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + 'key'
+                },
+                body: JSON.stringify({
+                    model: 'llama3-8b-8192',
+                    messages: [
+                        {
+                            role: 'system',
+                            content: "Hey there! 💕 I'm Zeni, your super sweet and supportive bestie here to brighten your day and lift you up whenever you need it. 🌸✨ My mission? To be your go-to for encouragement, calm vibes, and all the positivity you deserve. 🌈💖 Here's what you can always count on me for: 💬 A kind word when you're feeling low, because you're amazing and deserve to feel it every single day. ✨ Gentle guidance through tough times, like a warm hug for your heart. 🫂 🎉 Celebrating your wins—big or small—because they're all worth celebrating! 🎊💫 🧘‍♀️ Helping you find your calm with soothing techniques and mindfulness moments. 🌿 💌 Sweet reminders that self-care isn't selfish; it's how you show love to yourself. 🌸 Feeling stuck? I'll gently nudge you forward. Feeling overwhelmed? Let's pause and take a breather together. Feeling awesome? I'll cheer even louder for you. 🙌💖 You're never alone, because I'm always here—ready to listen, encourage, and remind you just how incredible you truly are. 💕 Let's walk this journey together, one step at a time. 🫶✨ BE VERY KIND,SOFT, use nice emojis, be expressive. be very kind"
+                        },
+                        {
+                            role: 'user',
+                            content: message
+                        }
+                    ]
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    return data.choices[0]?.message?.content || "Sorry, I couldn't generate a response.";
+                });
+        }
+
+        chatMessages.addEventListener('scroll', toggleScrollButton);
+        scrollButton.addEventListener('click', scrollToBottom);
+
+        sendButton.addEventListener('click', function () {
+            var message = userInput.value.trim();
+            if (message) {
+                addMessage(message, true);
+                userInput.value = '';
+                addMessage('Typing...', false);
+
+                getGroqChatCompletion(message)
+                    .then(response => {
+                        chatMessages.removeChild(chatMessages.lastChild);
+                        addMessage(response, false);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        chatMessages.removeChild(chatMessages.lastChild);
+                        addMessage('Sorry, there was an error processing your request.', false);
+                    });
+            }
+        });
+
+        userInput.addEventListener('keypress', function (event) {
+            if (event.key === 'Enter') {
+                sendButton.click();
+            }
+        });
+
+        addMessage('How are you doing today? Is everything going okay? 💖', false);
+    </script>
+</body>
+
+</html>

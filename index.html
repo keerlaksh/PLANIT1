@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Powered Study Timetable Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #000000;
+        }
+
+        .container {
+            background-color: #bc61bc35;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(202, 201, 201, 0.1);
+        }
+
+       h1 {
+    color: #f4f3f3;
+    text-align: center;
+    margin-bottom: 20px;
+    text-shadow: 0 0 10px rgba(186, 85, 211, 0.7), 0 0 20px rgba(186, 85, 211, 0.6), 0 0 30px rgba(186, 85, 211, 0.5);
+}
+
+
+        p {
+            color: #ffffff;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="number"],
+input[type="text"],
+textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #3e124832;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: rgba(255, 254, 254, 0.17); /* Adjusted opacity */
+}
+
+
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+button {
+    background: linear-gradient(45deg, #76188E, #9C27B0, #6A0DAD); /* Gradient shades of purple */
+    color: rgb(234, 230, 230);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+    transition: background 0.3s ease-in-out;
+}
+
+button:hover {
+    background: linear-gradient(45deg, #9C27B0, #6A0DAD, #4A0072); /* Darker purple on hover */
+}
+
+
+      
+       .timetable-container {
+    margin-top: 20px;
+    overflow-x: auto;
+}
+
+#timetable {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 800px;
+}
+
+#timetable th,
+#timetable td {
+    border: 1px solid #cb5fc9;
+    padding: 12px;
+    text-align: center;
+}
+
+#timetable th {
+    background-color: #953fca;  /* Light purple */
+    color: white;
+}
+
+#timetable th:first-child {
+    width: 150px;
+    background-color: #825292;  /* Lighter pinkish-purple */
+}
+
+#timetable td:first-child {
+    background-color: #d469bf;  /* Soft pink */
+    font-weight: bold;
+    text-align: left;
+}
+
+#timetable tr:nth-child(even) {
+    background-color: #aa5aa5;  /* Soft pinkish purple */
+}
+
+#timetable tr:nth-child(odd) {
+    background-color: #d384dc;  /* Light lavender purple */
+}
+
+#timetable td {
+    background-color: #bd73d5;  /* Very light pink */
+}
+
+
+        #error {
+            color: rgb(226, 214, 232);
+            margin-top: 10px;
+        }
+        input {
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5); /* Optional: sets a dark background with reduced opacity */
+}
+
+       
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>AI-Powered Study Timetable Generator</h1>
+        <p>Fill out the details below to generate your personalized study timetable:</p>
+
+        <form id="timetableForm">
+            <div class="form-group">
+                <label for="hoursPerDay"style="color: white;">Hours per day available for study:</label>
+                <input type="number" id="hoursPerDay" min="1" max="24" value="9" required>
+            </div>
+
+            <div class="form-group">
+                <label for="numSubjects"style="color: white;">Number of subjects:</label>
+                <input type="number" id="numSubjects" min="1" max="10" value="4" required>
+            </div>
+
+            <div class="form-group">
+                <label for="focusSubjects"style="color: white;">Subject(s) to focus on more:</label>
+                <input type="text" id="focusSubjects" value="Math" required>
+            </div>
+            
+            <div class="form-group">
+                <roductive for="productivehours" style="color: white;">Productive hours of the day:</label>
+                <input type="text" id="productivehours" value="10:00 AM - 1:00PM" required>
+            </div>
+
+
+            <div class="form-group">
+                <label for="duration"style="color: white;">Duration (in days):</label>
+                <input type="number" id="duration" min="1" value="7" required>
+            </div>
+
+            <div class="form-group">
+                <label for="otherCommitments"style="color: white;">Other commitments / Any Alterations(optional):</label>
+                <textarea id="otherCommitments"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="subjects"style="color: white;">Subjects (comma-separated):</label>
+                <input type="text" id="subjects" value="Math, Science, English, Social Studies" required>
+            </div>
+
+            <button type="submit"style="color: white;">Generate Timetable</button>
+        </form>
+
+        <div id="error"></div>
+        <div class="timetable-container">
+            <table id="timetable" style="display: none;"></table>
+        </div>
+    </div>
+
+    <script>
+        const API_KEY = 'key'; 
+        const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent';
+
+        function generateTimeSlots() {
+            const slots = [];
+            for (let hour = 9; hour < 17; hour++) {
+                const startTime = `${hour.toString().padStart(2, '0')}:00`;
+                const endTime = `${(hour + 1).toString().padStart(2, '0')}:00`;
+                slots.push(`${startTime} - ${endTime}`);
+            }
+            return slots;
+        }
+
+        async function generateTimetable(formData) {
+            const timeSlots = generateTimeSlots();
+
+            const prompt = `Generate a study timetable for ${formData.duration} days.
+                Available study hours: ${formData.hoursPerDay} hours daily
+                Subjects: ${formData.subjects}
+                Productive Hours: ${formData.focusSubjects}
+                Focus subjects: ${formData.focusSubjects}
+                Time slots: ${timeSlots.join(', ')}
+                
+                Please provide a timetable in CSV format with the following structure:
+                - First column: Time Slot (using the exact time slots provided)
+                - Subsequent columns: Day 1, Day 2, etc. up to Day ${formData.duration}
+                - Each cell should contain one of the subjects: ${formData.subjects}
+                - Ensure focus subjects appear more frequently
+                - Include short breaks (15 minutes) between sessions
+                - Include longer breaks (30 minutes) for lunch
+                
+                Output the timetable in this exact CSV format:
+                Time Slot,Day 1,Day 2,Day 3,...
+                ${timeSlots[0]},Math,Science,English,...
+                ${timeSlots[1]},Break,Break,Break,...
+                ${timeSlots[2]},Science,Math,Social Studies,...`;
+
+            try {
+                const response = await fetch(`${API_URL}?key=${API_KEY}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{
+                                text: prompt
+                            }]
+                        }],
+                        generationConfig: {
+                            temperature: 1,
+                            topP: 0.9,
+                            topK: 50,
+                            maxOutputTokens: 1024,
+                        }
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to generate timetable');
+                }
+
+                const data = await response.json();
+                if (!data.candidates || !data.candidates[0] || !data.candidates[0].content || !data.candidates[0].content.parts || !data.candidates[0].content.parts[0].text) {
+                    throw new Error('Invalid response from API');
+                }
+                return processResponse(data.candidates[0].content.parts[0].text);
+            } catch (error) {
+                console.error('API Error:', error);
+                throw new Error('Error generating timetable: ' + error.message);
+            }
+        }
+
+        function processResponse(csvText) {
+            try {
+                if (!csvText || typeof csvText !== 'string') {
+                    throw new Error('Invalid CSV data received');
+                }
+
+                const rows = csvText.trim().split('\n');
+                if (rows.length < 2) {
+                    throw new Error('Not enough data in the timetable');
+                }
+
+                const headers = rows[0].split(',').map(h => h.trim());
+                const timeSlots = [];
+                const daysMap = new Map();
+
+                rows.slice(1).forEach((row, index) => {
+                    const values = row.split(',').map(v => v.trim());
+                    if (values.length !== headers.length) {
+                        console.warn(`Row ${index + 1} has incorrect number of columns`);
+                        return;
+                    }
+
+                    const timeSlot = values[0];
+                    if (timeSlot) {
+                        timeSlots.push(timeSlot);
+
+                        for (let i = 1; i < values.length; i++) {
+                            const day = headers[i];
+                            if (!daysMap.has(day)) {
+                                daysMap.set(day, new Map());
+                            }
+                            daysMap.get(day).set(timeSlot, values[i] || 'Free');
+                        }
+                    }
+                });
+
+                return {
+                    timeSlots: timeSlots,
+                    days: headers.slice(1),
+                    schedule: daysMap
+                };
+            } catch (error) {
+                console.error('CSV Processing Error:', error);
+                throw new Error('Error processing timetable data');
+            }
+        }
+
+        function displayTimetable(timetableData) {
+            const table = document.getElementById('timetable');
+            table.innerHTML = '';
+
+            try {
+                const thead = document.createElement('thead');
+                const headerRow = document.createElement('tr');
+                headerRow.innerHTML = `<th>Time Slot</th>`;
+                timetableData.days.forEach(day => {
+                    headerRow.innerHTML += `<th>${day}</th>`;
+                });
+                thead.appendChild(headerRow);
+                table.appendChild(thead);
+
+                const tbody = document.createElement('tbody');
+                timetableData.timeSlots.forEach(timeSlot => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `<td>${timeSlot}</td>`;
+
+                    timetableData.days.forEach(day => {
+                        const subject = timetableData.schedule.get(day).get(timeSlot) || 'Free';
+                        const cell = document.createElement('td');
+                        cell.textContent = subject;
+
+                        if (subject.toLowerCase().includes('break')) {
+                            cell.style.backgroundColor = '#ac4bc8';
+                        } else if (subject === 'Free') {
+                            cell.style.backgroundColor = '#bd53ea';
+                        }
+
+                        row.appendChild(cell);
+                    });
+
+                    tbody.appendChild(row);
+                });
+                table.appendChild(tbody);
+
+                table.style.display = 'table';
+            } catch (error) {
+                console.error('Display Error:', error);
+                throw new Error('Error displaying timetable');
+            }
+        }
+
+        document.getElementById('timetableForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = '';
+
+            try {
+                const formData = {
+                    hoursPerDay: document.getElementById('hoursPerDay').value,
+                    numSubjects: document.getElementById('numSubjects').value,
+                    focusSubjects: document.getElementById('focusSubjects').value,
+                    productivehours: document.getElementById('productivehours').value,
+                    duration: document.getElementById('duration').value,
+                    otherCommitments: document.getElementById('otherCommitments').value,
+                    subjects: document.getElementById('subjects').value
+
+                };
+
+                errorDiv.textContent = 'Generating timetable...';
+
+                const timetableData = await generateTimetable(formData);
+                displayTimetable(timetableData);
+                errorDiv.textContent = '';
+            } catch (error) {
+                errorDiv.textContent = error.message;
+                document.getElementById('timetable').style.display = 'none';
+            }
+        });
+    </script>
+</body>
+
+</html>
+    
