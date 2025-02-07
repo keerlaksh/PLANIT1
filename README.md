@@ -71,6 +71,6 @@ Charumathi Sri P - Frontend
 
 The ppt and the demo video can be viewed below:
 PPT:
-[TECHDIVATHON PRESENTATION TEMPLATE.pptx.pdf](https://github.com/user-attachments/files/18714466/TECHDIVATHON.PRESENTATION.TEMPLATE.pptx.pdf)
+[TECHDIVATHON PRESENTATION TEMPLATE.pptx.pdf](https://github.com/user-attachments/files/18714466/TECHDIVATHON.PRESENTATION.TEMPLATE.pptx.pdf)<br>
 DEMO:
 PlanIt demo video(https://drive.google.com/file/d/1cJbBCjrOn19AwRxvrF1QSNw7XP0yIhM0/view?usp=drive_link)
