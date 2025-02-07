@@ -11,11 +11,13 @@ PlanIt is an AI-powered EdTech platform designed to help students efficiently ma
  🛠 Tech Stack: React, Node.js, Google Gemini API
  Terminal command : npm run dev
 
-2️⃣ Zeni - Mental Health Chatbot
+
+2️⃣ Zeni - Mental Health Chatbot (By Charumathi Sri)
 💬 An AI chatbot designed to support students emotionally and act as a virtual best friend.
 🛠 Tech Stack: HTML, CSS, JavaScript, Groq API
 
-3️⃣ FileTalk - Chat with PDF
+
+3️⃣ FileTalk - Chat with PDF(Frontend annd Backend by Mrinmayi Verma)
 📖 Upload a PDF and interact with it through AI-powered Q&A. Includes predefined prompts like:
 Summarize
 List key points
@@ -23,14 +25,14 @@ Generate questions
 🛠 Tech Stack: Streamlit, Groq API
  Terminal command : streamlit run chatpdf.py
 
-4️⃣ FocusFlow - Pomodoro Timer
+4️⃣ FocusFlow - Pomodoro Timer(by Charumathi Sri and Keerthi Lakshmi)
 ⏳ Customize study/break timers with:
 Theme selection & custom backgrounds
 Integrated Spotify playlist
 Doubt-clearing chatbot that keeps students on track
 🛠 Tech Stack: HTML, CSS, JavaScript, Google Gemini API
 
-5️⃣ GeekHub - Student Community
+5️⃣ GeekHub - Student Community(By Keerthi Lakshmi both backend and frontend)
 🌍 A platform for students to:
 Share files & posts
 Like, comment, and interact with others
@@ -41,23 +43,23 @@ Access & download free resources
  python int_db.py  (creates a new database)
  python app.py
 
-6️⃣ CalmSphere - Meditation & Wellness
+6️⃣ CalmSphere - Meditation & Wellness(By Mrinmayi verma)
 🧘 A meditation hub featuring:
 YouTube-guided relaxation sessions
 Advice cards to promote student well-being
 🛠 Tech Stack: HTML, CSS, JavaScript
 
-7️⃣ PeakPlanner - Personalized Timetable Generator
+7️⃣ PeakPlanner - Personalized Timetable Generator(BY Charumathi Sri )
 📅 Generates an AI-personalized timetable based on the user's study preferences, ensuring efficient time management with breaks.
 🛠 Tech Stack: HTML, CSS, JavaScript, Google Gemini API
 
-8️⃣ ReviewRealm - Feedback System
+8️⃣ ReviewRealm - Feedback System (By Varshini , charumathi , keerthi)
 📊 Gathers user feedback via Google Forms and presents graphical analytics on how much users like specific features.
 🛠 Tech Stack: Streamlit, Matplotlib
  Terminal command : 
 streamlit run graph.py
 
-9️⃣ CharityBridge - Social Impact (Future Scope)
+9️⃣ CharityBridge - Social Impact (Future Scope)(Mrinmayi Verma,charumathi sri,varshini)
 🌟 Currently redirects users to NGOs for donations, with future plans for a student-led charity initiative.
 🛠 Tech Stack: HTML, CSS, JavaScript
 
