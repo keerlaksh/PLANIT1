@@ -59,5 +59,8 @@ Mrinmayi Verma - Chat with PDF (FileTalk) backend & frontend, PPT creation
 Varshini K - Frontend
 Charumathi Sri P - Frontend
 
-The ppt and the demo video can be viewed below
-[TD29-HACKASTIC.pptx (1).pdf](https://github.com/user-attachments/files/18713069/TD29-HACKASTIC.pptx.1.pdf)
+The ppt and the demo video can be viewed below:
+PPT:
+[TECHDIVATHON PRESENTATION TEMPLATE.pptx.pdf](https://github.com/user-attachments/files/18714466/TECHDIVATHON.PRESENTATION.TEMPLATE.pptx.pdf)
+Demo:
+(https://drive.google.com/file/d/1cJbBCjrOn19AwRxvrF1QSNw7XP0yIhM0/view?usp=drive_link)
