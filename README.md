@@ -9,6 +9,7 @@ PlanIt is an AI-powered EdTech platform designed to help students efficiently ma
 1️⃣ Mapify - Mind Map Generator
 📌 Upload a PDF, extract key points, and generate a diagrammatic flowchart for structured learning.
  🛠 Tech Stack: React, Node.js, Google Gemini API
+ Terminal command : npm run dev
 
 2️⃣ Zeni - Mental Health Chatbot
 💬 An AI chatbot designed to support students emotionally and act as a virtual best friend.
@@ -20,6 +21,7 @@ Summarize
 List key points
 Generate questions
 🛠 Tech Stack: Streamlit, Groq API
+ Terminal command : streamlit run chatpdf.py
 
 4️⃣ FocusFlow - Pomodoro Timer
 ⏳ Customize study/break timers with:
@@ -34,6 +36,10 @@ Share files & posts
 Like, comment, and interact with others
 Access & download free resources
 🛠 Tech Stack: HTML, CSS, Python Flask, SQLite
+ Terminal command : 
+ activate the environment -----> conda activate my_env
+ python int_db.py  (creates a new database)
+ python app.py
 
 6️⃣ CalmSphere - Meditation & Wellness
 🧘 A meditation hub featuring:
@@ -48,6 +54,8 @@ Advice cards to promote student well-being
 8️⃣ ReviewRealm - Feedback System
 📊 Gathers user feedback via Google Forms and presents graphical analytics on how much users like specific features.
 🛠 Tech Stack: Streamlit, Matplotlib
+ Terminal command : 
+streamlit run graph.py
 
 9️⃣ CharityBridge - Social Impact (Future Scope)
 🌟 Currently redirects users to NGOs for donations, with future plans for a student-led charity initiative.
@@ -62,5 +70,5 @@ Charumathi Sri P - Frontend
 The ppt and the demo video can be viewed below:
 PPT:
 [TECHDIVATHON PRESENTATION TEMPLATE.pptx.pdf](https://github.com/user-attachments/files/18714466/TECHDIVATHON.PRESENTATION.TEMPLATE.pptx.pdf)
-Demo:
-(https://drive.google.com/file/d/1cJbBCjrOn19AwRxvrF1QSNw7XP0yIhM0/view?usp=drive_link)
+DEMO:
+PlanIt demo video(https://drive.google.com/file/d/1cJbBCjrOn19AwRxvrF1QSNw7XP0yIhM0/view?usp=drive_link)
